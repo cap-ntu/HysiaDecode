@@ -49,7 +49,7 @@ class CPUDecoder: public BaseDecoder
 	public:
 		CPUDecoder();
 		~CPUDecoder();
-		void IngestVideo(const char*) override;
+		int IngestVideo(const char*) override;
 		cv::Mat FetchFrame() override;
 
 };
