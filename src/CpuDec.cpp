@@ -6,11 +6,9 @@
 
 #include "CpuDec.h"
 #include <iostream>
+#include <cstdint>
 
 using namespace std;
-
-long U[256], V[256], Y1[256], Y2[256];
-uint64_t RGB_SIZE = 0;
 
 void MakeConversionTable()
 {
@@ -91,11 +89,18 @@ unsigned char* convertYUVToRGB(unsigned char* yuv, int width, int height)
     return bgr;
 }
 
-void CPUDecoder::IngestVideo(const char* filename){
+CPUDecoder::CPUDecoder(){
+}
+
+CPUDecoder::~CPUDecoder(){
+}
+
+
+int CPUDecoder::IngestVideo(const char* filename){
 
 	av_register_all(); //initialize decoding environments
 	MakeConversionTable();
-	if (avformat_open_input(&pFmt, fileName, piFmt, NULL) < 0)
+	if (avformat_open_input(&pFmt, filename, piFmt, NULL) < 0)
 	{
 		cerr<<"avformat open failed";
 		return -1;
@@ -166,6 +171,7 @@ void CPUDecoder::IngestVideo(const char* filename){
 	AVFrame *pframe = av_frame_alloc();
 	int yuvheight = pVideoCodecCtx->height;
 	int yuvwidth = pVideoCodecCtx->width;
+	int yuvlen = (int)(yuvheight * yuvwidth * 3/2);
 	AVPacket pkt;
 	av_init_packet(&pkt);
 	unsigned char * yuvdata = (unsigned char *)calloc(sizeof(unsigned char),sizeof(float)*yuvlen);
@@ -206,12 +212,16 @@ void CPUDecoder::IngestVideo(const char* filename){
 					Mat img(yuvheight, yuvwidth, CV_8UC3, rgbData);
 				}
 			}
+			av_free_packet(&pkt);
 		}
 	}
+	av_free(pframe);
+	free(yuvdata);
 }
 
 
 Mat CPUDecoder::FetchFrame(){
+	// empty files
 
 }
 
