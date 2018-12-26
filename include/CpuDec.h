@@ -4,12 +4,12 @@
  * Description:	video decoded with CPU
  */
 
-#ifdef __CPUDEC_H
+#ifndef __CPUDEC_H
 #define __CPUDEC_H
 
 #include "BaseDec.h"
-#include "DecodeQueue.hpp"
-#include "opencv/opencv.hpp"
+#include <opencv2/opencv.hpp>
+#include <cstdint>
 
 #ifdef __cplusplus
 extern "C"
@@ -25,7 +25,10 @@ extern "C"
 }
 #endif
 
-using namespace cv2;
+using namespace cv;
+
+long U[256], V[256], Y1[256], Y2[256];
+uint64_t RGB_SIZE = 0;
 
 class CPUDecoder: public BaseDecoder
 {
@@ -42,7 +45,6 @@ class CPUDecoder: public BaseDecoder
 		AVPacket pkt;
 		int videoindex = -1;
 		int audioindex = -1;
-		decode_queue = DecodeQueue(100); // queue for video decoding
 
 	public:
 		CPUDecoder();
@@ -52,4 +54,7 @@ class CPUDecoder: public BaseDecoder
 
 };
 
+void MakeConversionTable();
+void YUV420ToRGB (uint64_t width, uint64_t height, unsigned char *pYUVBuf, unsigned char *pRGBBuf);
+unsigned char* convertYUVToRGB(unsigned char* yuv, int width, int height);
 #endif
