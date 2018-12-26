@@ -4,8 +4,8 @@
  * Description:	video decoded with CPU
  */
 
-#ifndef __CPUDEC_H
-#define __CPUDEC_H
+#ifndef _CPUDEC_H
+#define _CPUDEC_H
 
 #include "BaseDec.h"
 #include <opencv2/opencv.hpp>
