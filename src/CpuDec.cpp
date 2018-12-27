@@ -10,10 +10,12 @@
 
 using namespace std;
 
+long U[256], V[256], Y1[256], Y2[256];
+uint64_t RGB_SIZE = 0;
+
 void MakeConversionTable()
 {
         long i;
-
         for (i=0; i<256; i++)
         {
             V[i] = 15938*i-2221300;
@@ -168,6 +170,7 @@ int CPUDecoder::IngestVideo(const char* filename){
 	}
 
 	int got_picture;
+	int num = 0;
 	AVFrame *pframe = av_frame_alloc();
 	int yuvheight = pVideoCodecCtx->height;
 	int yuvwidth = pVideoCodecCtx->width;
@@ -210,9 +213,13 @@ int CPUDecoder::IngestVideo(const char* filename){
 
 					rgbData=convertYUVToRGB(yuvdata,yuvwidth,yuvheight);
 					Mat img(yuvheight, yuvwidth, CV_8UC3, rgbData);
+					cout<<num<<endl;
+					num++;
 				}
 			}
 			av_free_packet(&pkt);
+		}else{
+			break;
 		}
 	}
 	av_free(pframe);
