@@ -1,8 +1,8 @@
-#include <../include/CpuDec.h>
+#include "CpuDec.h"
 
 int main(int argc, char **argv){
-	filename = argv[1];
-	test = CPUDecoder();
+	char* filename = argv[1];
+	CPUDecoder test = CPUDecoder();
 	test.IngestVideo(filename);
 	return 0;
 }
