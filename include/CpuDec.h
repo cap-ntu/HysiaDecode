@@ -27,8 +27,6 @@ extern "C"
 
 using namespace cv;
 
-long U[256], V[256], Y1[256], Y2[256];
-uint64_t RGB_SIZE = 0;
 
 class CPUDecoder: public BaseDecoder
 {
@@ -51,10 +49,6 @@ class CPUDecoder: public BaseDecoder
 		~CPUDecoder();
 		int IngestVideo(const char*) override;
 		cv::Mat FetchFrame() override;
-
 };
 
-void MakeConversionTable();
-void YUV420ToRGB (uint64_t width, uint64_t height, unsigned char *pYUVBuf, unsigned char *pRGBBuf);
-unsigned char* convertYUVToRGB(unsigned char* yuv, int width, int height);
 #endif
