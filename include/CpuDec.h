@@ -49,10 +49,6 @@ class CPUDecoder: public BaseDecoder
 		~CPUDecoder();
 		int IngestVideo(const char*) override;
 		cv::Mat FetchFrame() override;
-
 };
 
-void MakeConversionTable();
-void YUV420ToRGB (uint64_t width, uint64_t height, unsigned char *pYUVBuf, unsigned char *pRGBBuf);
-unsigned char* convertYUVToRGB(unsigned char* yuv, int width, int height);
 #endif
