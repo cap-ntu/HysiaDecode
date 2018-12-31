@@ -39,8 +39,8 @@ class CPUDecoder: public BaseDecoder
 		AVInputFormat *piFmt = NULL;
 		AVFormatContext *pFmt = NULL;
 		AVStream *pVst,*pAst;
-		AVFrame *pframe = av_frame_alloc();
-		AVPacket pkt;
+		//AVFrame *pframe = av_frame_alloc();
+		//AVPacket pkt;
 		int videoindex = -1;
 		int audioindex = -1;
 
@@ -48,7 +48,7 @@ class CPUDecoder: public BaseDecoder
 		CPUDecoder();
 		~CPUDecoder();
 		int IngestVideo(const char*) override;
-		cv::Mat FetchFrame() override;
+		int FetchFrame() override;
 };
 
 #endif

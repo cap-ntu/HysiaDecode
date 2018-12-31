@@ -13,9 +13,9 @@ class BaseDecoder
 public:
     BaseDecoder() = default;
     // Ingest a video file
-    virtual int IngestVideo(const char*);
+    virtual int IngestVideo(const char*) = 0;
     // Fetch frame as mat object
-    virtual cv::Mat FetchFrame();
+    virtual int FetchFrame() = 0;
 };
 
 
