@@ -27,8 +27,6 @@ extern "C"
 
 using namespace cv;
 
-long U[256], V[256], Y1[256], Y2[256];
-uint64_t RGB_SIZE = 0;
 
 class CPUDecoder: public BaseDecoder
 {
