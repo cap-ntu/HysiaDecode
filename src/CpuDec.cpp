@@ -169,13 +169,15 @@ int CPUDecoder::IngestVideo(const char* filename){
 		return -1;
 	}
 
+}
+
+Mat CPUDecoder::FetchFrame(){
+
 	int got_picture;
 	int num = 0;
-	AVFrame *pframe = av_frame_alloc();
 	int yuvheight = pVideoCodecCtx->height;
 	int yuvwidth = pVideoCodecCtx->width;
 	int yuvlen = (int)(yuvheight * yuvwidth * 3/2);
-	AVPacket pkt;
 	av_init_packet(&pkt);
 	unsigned char * yuvdata = (unsigned char *)calloc(sizeof(unsigned char),sizeof(float)*yuvlen);
 	unsigned char * rgbData;
@@ -224,12 +226,6 @@ int CPUDecoder::IngestVideo(const char* filename){
 	}
 	av_free(pframe);
 	free(yuvdata);
-}
-
-
-Mat CPUDecoder::FetchFrame(){
-	// empty files
-
 }
 
 
