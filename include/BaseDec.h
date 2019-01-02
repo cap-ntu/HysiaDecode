@@ -16,6 +16,8 @@ public:
     virtual int IngestVideo(const char*);
     // Fetch frame as mat object
     virtual cv::Mat FetchFrame();
+    virtual int GetHeight() = 0;
+    virtual int GetWidth() = 0;
 };
 
 
