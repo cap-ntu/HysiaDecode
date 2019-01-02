@@ -14,13 +14,13 @@ using std::vector;
 
 template<class T>
 class DecodeQueue{
-    private:
+public:
     vector<T> _data;
     int _head; // queue head
     int _end;  // queue tail
     int _size;   // queue size
     sem_t sem; // linux semaphore
-    public:
+public:
     DecodeQueue(int s){
         _data.resize(s);
         _head = 0;
@@ -49,6 +49,11 @@ class DecodeQueue{
         _end = (_end+1)%_size;
         return t;
     }
+
+	// get queue size
+	int size(){
+		return (_head - _end) % _size;
+	}
 };
 
 #endif

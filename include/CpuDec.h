@@ -48,7 +48,9 @@ class CPUDecoder: public BaseDecoder
 		CPUDecoder();
 		~CPUDecoder();
 		int IngestVideo(const char*) override;
-		int FetchFrame() override;
+		int FetchFrame(DecodeQueue<cv::Mat> &queue) override;
+		int GetWidth() override;
+		int GetHeight() override;
 };
 
 #endif

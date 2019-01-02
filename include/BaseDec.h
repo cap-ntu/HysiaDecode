@@ -6,6 +6,7 @@
 #define _BaseDec_H
 
 #include "opencv2/opencv.hpp"
+#include "DecodeQueue.hpp"
 
 
 class BaseDecoder
@@ -15,7 +16,9 @@ public:
     // Ingest a video file
     virtual int IngestVideo(const char*) = 0;
     // Fetch frame as mat object
-    virtual int FetchFrame() = 0;
+    virtual int FetchFrame(DecodeQueue<cv::Mat> &queue) = 0;
+    virtual int GetHeight() = 0;
+    virtual int GetWidth() = 0;
 };
 
 

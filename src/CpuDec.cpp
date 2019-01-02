@@ -168,10 +168,11 @@ int CPUDecoder::IngestVideo(const char* filename){
 		cerr<<"could not find audio codec";
 		return -1;
 	}
+	return 0;
 
 }
 
-int CPUDecoder::FetchFrame(){
+int CPUDecoder::FetchFrame(DecodeQueue<cv::Mat> &queue){
 
 	int got_picture;
 	AVFrame *pframe = av_frame_alloc();
@@ -217,8 +218,8 @@ int CPUDecoder::FetchFrame(){
 
 					rgbData=convertYUVToRGB(yuvdata,yuvwidth,yuvheight);
 					Mat img(yuvheight, yuvwidth, CV_8UC3, rgbData);
-					cout<<num<<endl;
-					num++;
+					queue.push(img);
+					cout<<"decode thread\t"<<queue.size()<<"\t"<<queue._head<<"\t"<<queue._end<<endl;
 				}
 			}
 		}else{
@@ -229,6 +230,15 @@ int CPUDecoder::FetchFrame(){
 	av_free(pframe);
 	free(yuvdata);
 	return 0;
+}
+
+int CPUDecoder::GetWidth(){
+	return pVideoCodecCtx->width;
+}
+
+
+int CPUDecoder::GetHeight(){
+	return pVideoCodecCtx->height;
 }
 
 
