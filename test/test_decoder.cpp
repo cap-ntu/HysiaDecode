@@ -6,10 +6,9 @@
  */
 
 #include "../include/Decoder.hpp"
-#include "../include/opencv2/opencv.hpp"
+#include "../include/opencv/opencv2/opencv.hpp"
+#include "../include/opencv/opencv2/core.hpp"
 
-using namespace std;
-using namespace cv;
 
 int main(int argc, char **argv){
 	char* filename = argv[1];
@@ -18,10 +17,10 @@ int main(int argc, char **argv){
 	while(1)
 	{
 		
-		Mat* tmp = test.fetchFrame();
-		cout<<tmp.rows<<"\t"<<tmp.cols<<endl;
-		if(tmp.empty()){
-			cout<<"empty image"<<endl;
+		cv::Mat* tmp = test.fetchFrame();
+		std::cout<<tmp->rows<<"\t"<<tmp->cols<<std::endl;
+		if(!tmp){
+			std::cout<<"empty image"<<std::endl;
 		}
 	}
 };
