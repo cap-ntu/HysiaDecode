@@ -18,9 +18,10 @@ int main(int argc, char **argv){
 	{
 		
 		cv::Mat* tmp = test.fetchFrame();
-		std::cout<<tmp->rows<<"\t"<<tmp->cols<<std::endl;
 		if(!tmp){
 			std::cout<<"empty image"<<std::endl;
+			break;
 		}
+		std::cout<<tmp->rows<<"\t"<<tmp->cols<<std::endl;
 	}
 };

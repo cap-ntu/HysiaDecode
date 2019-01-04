@@ -25,7 +25,6 @@ extern "C"
 }
 #endif
 
-using namespace cv;
 
 
 class CPUDecoder: public BaseDecoder

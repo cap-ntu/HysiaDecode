@@ -32,9 +32,11 @@ public:
 	}
 	int decodeThread(){
         BaseDecoder* decoder = nullptr;
-		if(check_device(1)){// GPUs exist
+		if(check_device(1) == 0){// GPUs exist
+			cout << "Using GPU" << endl;
             decoder = new GPUDecoder(0);
 		}else{ // no GPUs
+			cout << "Using CPU" << endl;
             decoder = new CPUDecoder();
 		}
         decoder->IngestVideo(filename);
@@ -45,7 +47,7 @@ public:
 
 	int decode(){
 		thread _thread(&Decoder::decodeThread, this);
-		_thread.join();
+		_thread.detach();
 	}
 
 	T fetchFrame(){

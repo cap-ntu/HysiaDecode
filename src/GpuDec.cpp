@@ -44,7 +44,7 @@ int GPUDecoder::GetWidth() {
     return (demuxer)? demuxer->GetWidth() : 0;
 }
 
-void GPUDecoder::IngestVideo(const char* videoFile) {
+int GPUDecoder::IngestVideo(const char* videoFile) {
     demuxer.reset(new FFmpegDemuxer(videoFile));
     dec.reset(new NvDecoder(cuContext, demuxer->GetWidth(), demuxer->GetHeight(), true, FFmpeg2NvCodecId(demuxer->GetVideoCodec())));
     frameSize = 3 * demuxer->GetWidth() * demuxer->GetHeight();
@@ -55,8 +55,8 @@ void GPUDecoder::IngestVideo(const char* videoFile) {
         cuMemFree(pTmpImage);
     }
     // Create new frame container
-    bgrImage.reset(new cv::Mat(demuxer->GetWidth(), demuxer->GetHeight(), CV_8UC3));
     cuMemAlloc(&pTmpImage, frameSize);
+	return 0;
 }
 
 
@@ -81,13 +81,13 @@ cv::Mat* GPUDecoder::ToMat(uint8_t* rawData) {
     cv::Mat channelR(dec->GetHeight(), dec->GetWidth(), CV_8UC1, rawData + 2 * dec->GetHeight() * dec->GetWidth());
 
     std::vector<cv::Mat> channels{channelR, channelG, channelB};
-    auto rgbImage = new Mat();
+    auto rgbImage = new cv::Mat();
     cv::merge(channels, *rgbImage);
     return rgbImage;
 }
 
 
-int DecodeFrames(DecodeQueue<cv::Mat*> &queue) {
+int GPUDecoder::DecodeFrames(DecodeQueue<cv::Mat*> &queue) {
     while(nVideoBytes) {
         uint8_t** ppFrame;
         demuxer->Demux(&pVideo, &nVideoBytes);

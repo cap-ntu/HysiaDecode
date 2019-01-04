@@ -11,8 +11,8 @@
 #include <cuda.h>
 #include "BaseDec.h"
 #include "NvDecoder/NvDecoder.h"
-#include "utils/NvCodecUtils.h"
-#include "utils/FFmpegDemuxer.h"
+#include "Utils/NvCodecUtils.h"
+#include "Utils/FFmpegDemuxer.h"
 #include "opencv2/opencv.hpp"
 #include "opencv2/core.hpp"
 
@@ -40,6 +40,6 @@ public:
 private:
     void GetImage(CUdeviceptr dpSrc, uint8_t *pDst, int nWidth, int nHeight);
     cv::Mat* ToMat(uint8_t*);
-}
+};
 
 #endif //end _GPU_DECODE_
