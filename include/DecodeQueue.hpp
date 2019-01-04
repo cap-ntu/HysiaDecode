@@ -55,9 +55,12 @@ public:
 
 	// get queue size
 	int get_size(){
+		/*
 		int size = 0;
 		sem_getvalue(&sem, &size);
 		return size;
+		*/
+		return (_head - _end) % _size;
 	}
 };
 
