@@ -37,7 +37,10 @@ public:
     int push(T t){
         int size;
         sem_getvalue(&sem, &size);
-        if(size==_size) return -1;
+		while(size >= _size){
+			sem_getvalue(&sem, &size);
+		}
+        //if(size==_size) return -1;
         _data[_head] = t;
         _head = (_head+1)%_size;
         sem_post(&sem);
@@ -51,8 +54,10 @@ public:
     }
 
 	// get queue size
-	int size(){
-		return (_head - _end) % _size;
+	int get_size(){
+		int size = 0;
+		sem_getvalue(&sem, &size);
+		return size;
 	}
 };
 
