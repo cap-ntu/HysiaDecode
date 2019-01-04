@@ -7,7 +7,7 @@ using namespace std;
 
 void *get_frame(DecodeQueue<cv::Mat> &myqueue)
 {
-	cout<<"FetchFrame "<<myqueue.size()<<endl;
+	cout<<"DecodeFrames "<<myqueue.size()<<endl;
 	while(1)
 	{
 		cout<<myqueue.size()<<"\t"<<myqueue._head<<"\t"<<myqueue._end<<endl;
@@ -35,7 +35,7 @@ int main(int argc, char **argv){
 	char* filename = argv[1];
 	CPUDecoder test = CPUDecoder();
 	test.IngestVideo(filename);
-	test.FetchFrame(myqueue);
+	test.DecodeFrames(myqueue);
 
 	for(int i = 0; i < 1; i++){
 		pthread_join(my_thread[i], &res);

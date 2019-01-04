@@ -9,7 +9,7 @@
 #define _DECODER_H
 
 #include "CpuDec.h"
-//#include "GpuDec.h"
+#include "GpuDec.h"
 #include "DecodeQueue.hpp"
 #include "CheckDevice.h"
 #include <pthread.h>
@@ -31,15 +31,15 @@ public:
 		//empty destoryer
 	}
 	int decodeThread(){
-		//if(check_device(1)){// GPUs exist
-		if(0){// GPUs exist
-			; // GPU decoder
-
+        BaseDecoder* decoder = nullptr;
+		if(check_device(1)){// GPUs exist
+            decoder = new GPUDecoder(0);
 		}else{ // no GPUs
-			CPUDecoder decoder = CPUDecoder();
-			decoder.IngestVideo(filename);
-			decoder.FetchFrame(queue);
+            decoder = new CPUDecoder();
 		}
+        decoder->IngestVideo(filename);
+        decoder->DecodeFrames(queue);
+        delete decoder;
 		return 0;
 	}
 
@@ -48,7 +48,7 @@ public:
 		_thread.join();
 	}
 
-	T fetcher(){
+	T fetchFrame(){
 		return this->queue.pop();
 		/*
 		if(this->queue.get_size() > 1){

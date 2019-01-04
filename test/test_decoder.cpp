@@ -13,12 +13,12 @@ using namespace cv;
 
 int main(int argc, char **argv){
 	char* filename = argv[1];
-	Decoder<cv::Mat> test = Decoder<cv::Mat>(filename);
+	Decoder<cv::Mat*> test(filename);
 	test.decode();
 	while(1)
 	{
 		
-		Mat tmp = test.fetcher();
+		Mat* tmp = test.fetchFrame();
 		cout<<tmp.rows<<"\t"<<tmp.cols<<endl;
 		if(tmp.empty()){
 			cout<<"empty image"<<endl;

@@ -1,7 +1,16 @@
 //
 // Created by WENBO JIANG on 14/12/18.
 //
+#include <queue>
+#include <iostream>
 #include "GpuDec.h"
+#include "cuda.h"
+#include "opencv2/opencv.hpp"
+#include "opencv2/core.hpp"
+#include "NvDecoder/NvDecoder.h"
+#include "Utils/NvCodecUtils.h"
+#include "Utils/FFmpegDemuxer.h"
+
 
 GPUDecoder::GPUDecoder(int device_id) {
     ck(cuInit(0));
@@ -24,18 +33,6 @@ GPUDecoder::~GPUDecoder() {
     if(pTmpImage) {
         cuMemFree(pTmpImage);
     }
-}
-
-GPUDecoder& GPUDecoder::operator=(GPUDecoder&& gd) {
-	dec.swap(gd.dec);
-	demuxer.swap(gd.demuxer);
-	return *this;
-}
-
-GPUDecoder& GPUDecoder::operator=(GPUDecoder& gd) {
-	dec.swap(gd.dec);
-	demuxer.swap(gd.demuxer);
-	return *this;
 }
 
 
@@ -78,39 +75,36 @@ void GPUDecoder::GetImage(CUdeviceptr dpSrc, uint8_t *pDst, int nWidth, int nHei
 }
 
 
-void GPUDecoder::ToMat(uint8_t* rawData) {
+cv::Mat* GPUDecoder::ToMat(uint8_t* rawData) {
     cv::Mat channelB(dec->GetHeight(), dec->GetWidth(), CV_8UC1, rawData);
     cv::Mat channelG(dec->GetHeight(), dec->GetWidth(), CV_8UC1, rawData + dec->GetHeight() * dec->GetWidth());
     cv::Mat channelR(dec->GetHeight(), dec->GetWidth(), CV_8UC1, rawData + 2 * dec->GetHeight() * dec->GetWidth());
 
-    std::vector<cv::Mat> channels{channelB, channelG, channelR};
-    cv::merge(channels, *(bgrImage.get()));
+    std::vector<cv::Mat> channels{channelR, channelG, channelB};
+    auto rgbImage = new Mat();
+    cv::merge(channels, *rgbImage);
+    return rgbImage;
 }
 
 
-void GPUDecoder::FetchFrame(unsigned char** framePtr) {
-    while (frameQueue.empty() && nVideoBytes) {
+int DecodeFrames(DecodeQueue<cv::Mat*> &queue) {
+    while(nVideoBytes) {
         uint8_t** ppFrame;
         demuxer->Demux(&pVideo, &nVideoBytes);
         int nFrameReturned = 0;
         dec->Decode(pVideo, nVideoBytes, &ppFrame, &nFrameReturned);
 
         for(int i = 0; i < nFrameReturned; i++) {
-            frameQueue.push(ppFrame[i]);
+            Nv12ToBgrPlanar((uint8_t*)ppFrame[i], dec->GetWidth(), (uint8_t*)pTmpImage, dec->GetWidth(), dec->GetWidth(), dec->GetHeight());
+            GetImage(pTmpImage, reinterpret_cast<uint8_t*>(pImage.get()), dec->GetWidth(), 3 * dec->GetHeight());
+            cv::Mat* rgbImage = ToMat(pImage.get());
+            queue.push(rgbImage);
         }
     }
-    if(frameQueue.empty()) {
-        nVideoBytes = 1;
-        *framePtr = nullptr;
-    }
-    else {
-        uint8_t* pFrame = frameQueue.back();
-        frameQueue.pop();
-        Nv12ToBgrPlanar((uint8_t*)pFrame, dec->GetWidth(), (uint8_t*)pTmpImage, dec->GetWidth(), dec->GetWidth(), dec->GetHeight());
-        GetImage(pTmpImage, reinterpret_cast<uint8_t*>(pImage.get()), dec->GetWidth(), 3 * dec->GetHeight());
-        ToMat(pImage.get());
-		*framePtr = reinterpret_cast<unsigned char*>(bgrImage.get());
-    }
+    // End of video
+    nVideoBytes = 1;
+    queue.push(nullptr);
+    return 0;
 }
 
 

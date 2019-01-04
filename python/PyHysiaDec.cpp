@@ -7,9 +7,9 @@ namespace py = pybind11;
 
 
 // Wrap the class method 
-py::array_t<uint8_t> FetchFrame(GPUDecoder* dec) {
+py::array_t<uint8_t> DecodeFrames(GPUDecoder* dec) {
 	unsigned char* data = nullptr;
-	dec->FetchFrame(&data);
+	dec->DecodeFrames(&data);
 	if(data) {
 		// Avoid python from gabbage collecting the numpy array
 		py::capsule doNothing(data, [](void* d){
@@ -36,7 +36,7 @@ PYBIND11_MODULE(PyHysiaDec, m) {
 	py::class_<GPUDecoder>(m, "GPUDecoder")
 		.def(py::init<int>())
 		.def("IngestVideo", &GPUDecoder::IngestVideo)
-		.def("FetchFrame", &FetchFrame);
+		.def("DecodeFrames", &DecodeFrames);
 }
 
 

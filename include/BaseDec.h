@@ -16,7 +16,7 @@ public:
     // Ingest a video file
     virtual int IngestVideo(const char*) = 0;
     // Fetch frame as mat object
-    virtual int FetchFrame(DecodeQueue<cv::Mat> &queue) = 0;
+    virtual int DecodeFrames(DecodeQueue<cv::Mat*> &queue) = 0;
     virtual int GetHeight() = 0;
     virtual int GetWidth() = 0;
 };

@@ -20,7 +20,7 @@ if __name__ == "__main__":
     dec.IngestVideo(video_path)
     tick = time.time()
     while True:
-        frame = dec.FetchFrame()
+        frame = dec.DecodeFrames()
         if frame.size == 0:
             break
     tock = time.time()

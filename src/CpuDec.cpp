@@ -172,7 +172,7 @@ int CPUDecoder::IngestVideo(const char* filename){
 
 }
 
-int CPUDecoder::FetchFrame(DecodeQueue<cv::Mat> &queue){
+int CPUDecoder::DecodeFrames(DecodeQueue<cv::Mat*> &queue){
 
 	int got_picture;
 	AVFrame *pframe = av_frame_alloc();
@@ -217,12 +217,13 @@ int CPUDecoder::FetchFrame(DecodeQueue<cv::Mat> &queue){
 					}
 
 					rgbData=convertYUVToRGB(yuvdata,yuvwidth,yuvheight);
-					Mat img(yuvheight, yuvwidth, CV_8UC3, rgbData);
+                    auto img = new cv::Mat(yuvheight, yuvwidth, CV_8UC3, rgbData);
 					queue.push(img);
 					cout<<"decode thread\t"<<queue.size()<<"\t"<<queue._head<<"\t"<<queue._end<<endl;
 				}
 			}
 		}else{
+            queue.push(nullptr);
 			break;
 		}
 		av_free_packet(&pkt);
