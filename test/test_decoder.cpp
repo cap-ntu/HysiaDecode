@@ -12,7 +12,8 @@
 
 int main(int argc, char **argv){
 	char* filename = argv[1];
-	Decoder<cv::Mat*> test(filename);
+	Decoder<cv::Mat*> test("CPU");
+	test.ingestVideo("short.mp4");
 	test.decode();
 	while(1)
 	{
