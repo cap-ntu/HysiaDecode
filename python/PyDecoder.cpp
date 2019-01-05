@@ -9,13 +9,12 @@ namespace py = pybind11;
 
 // Wrap the class method 
 // Convert opencv mat to numpy array
-py::array_t<uint8_t> fetchFrame(Decoder* dec) {
-	cv::Mat frame = dec.fetchFrame();
+py::array_t<uint8_t> fetchFrame(Decoder<cv::Mat*>* dec) {
+	cv::Mat* frame = dec->fetchFrame();
 	if(frame) {
-		// Transfer resource release to Python
-		py::capsule cleanUp(data, [](void* d){
-			d = reinterpret_cast<cv::Mat*>(d);
-			delete d;
+		// Transfer memory management to Python
+		py::capsule cleanUp(frame, [](void* d){
+			delete reinterpret_cast<cv::Mat*>(d);
 		});
 		// Construct Numpy array from data pointer without copying
 		// With the help of capsule
@@ -33,12 +32,14 @@ py::array_t<uint8_t> fetchFrame(Decoder* dec) {
 
 
 
-PYBIND11_MODULE(PyHysiaDec, m) {
-	py::class_<GPUDecoder>(m, "Decoder")
-		.def(py::init<char*>())
-		.def("decode", &Decoder::decode)
-		.def("getWidth", &Decoder::getWidth)
-		.def("getHeight", &Decoder::getHeight)
+PYBIND11_MODULE(PyDecoder, m) {
+	py::class_<Decoder<cv::Mat*>>(m, "Decoder")
+		.def(py::init<>())
+		.def(py::init<const char*>()) // Constructor overloading
+		.def("ingestVideo", &Decoder<cv::Mat*>::ingestVideo)
+		.def("decode", &Decoder<cv::Mat*>::decode)
+		.def("getWidth", &Decoder<cv::Mat*>::getWidth)
+		.def("getHeight", &Decoder<cv::Mat*>::getHeight)
 		.def("fetchFrame", &fetchFrame);
 }
 
