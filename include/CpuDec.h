@@ -29,27 +29,27 @@ extern "C"
 
 class CPUDecoder: public BaseDecoder
 {
-	private:
-		AVCodec *pVideoCodec = NULL;
-		AVCodec *pAudioCodec = NULL;
-		AVCodecContext *pVideoCodecCtx = NULL;
-		AVCodecContext *pAudioCodecCtx = NULL;
-		AVIOContext *pb = NULL;
-		AVInputFormat *piFmt = NULL;
-		AVFormatContext *pFmt = NULL;
-		AVStream *pVst,*pAst;
-		//AVFrame *pframe = av_frame_alloc();
-		//AVPacket pkt;
-		int videoindex = -1;
-		int audioindex = -1;
+private:
+	AVCodec *pVideoCodec = NULL;
+	AVCodec *pAudioCodec = NULL;
+	AVCodecContext *pVideoCodecCtx = NULL;
+	AVCodecContext *pAudioCodecCtx = NULL;
+	AVIOContext *pb = NULL;
+	AVInputFormat *piFmt = NULL;
+	AVFormatContext *pFmt = NULL;
+	AVStream *pVst,*pAst;
+	//AVFrame *pframe = av_frame_alloc();
+	//AVPacket pkt;
+	int videoindex = -1;
+	int audioindex = -1;
 
-	public:
-		CPUDecoder();
-		~CPUDecoder();
-		int IngestVideo(const char*) override;
-		int DecodeFrames(DecodeQueue<cv::Mat*> &queue) override;
-		int GetWidth() override;
-		int GetHeight() override;
+public:
+	CPUDecoder();
+	~CPUDecoder();
+	int IngestVideo(const char*) override;
+	int DecodeFrames(DecodeQueue<cv::Mat*> &queue) override;
+	int GetWidth() override;
+	int GetHeight() override;
 };
 
 #endif
