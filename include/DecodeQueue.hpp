@@ -29,7 +29,7 @@ public:
 		_end = 0;
 		_size = s;
 		sem_init(&sem, 0, 0);
-    }
+	}
 	~DecodeQueue()
 	{
 		_data.clear();
@@ -50,7 +50,7 @@ public:
         _data[_head] = t;
         _head = (_head + 1) % _size;
         sem_post(&sem);
-    }
+	}
     // if queue is empty, wait
     T pop()
     {
