@@ -15,26 +15,26 @@ using std::vector;
 template <class T>
 class DecodeQueue
 {
-  public:
-    vector<T> _data;
-    int _head; // queue head
-    int _end;  // queue tail
-    int _size; // queue size
-    sem_t sem; // linux semaphore
-  public:
-    DecodeQueue(int s)
-    {
-        _data.resize(s);
-        _head = 0;
-        _end = 0;
-        _size = s;
-        sem_init(&sem, 0, 0);
+public:
+	vector<T> _data;
+	int _head; // queue head
+	int _end;  // queue tail
+	int _size; // queue size
+	sem_t sem; // linux semaphore
+public:
+	DecodeQueue(int s)
+	{
+		_data.resize(s);
+		_head = 0;
+		_end = 0;
+		_size = s;
+		sem_init(&sem, 0, 0);
     }
-    ~DecodeQueue()
-    {
-        _data.clear();
-        sem_destroy(&sem);
-    }
+	~DecodeQueue()
+	{
+		_data.clear();
+		sem_destroy(&sem);
+	}
     // if queue is full, discard the incoming data
     // if push data fail, return -1
     int push(T t)
