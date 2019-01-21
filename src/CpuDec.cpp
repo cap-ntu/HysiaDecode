@@ -219,7 +219,7 @@ int CPUDecoder::DecodeFrames(DecodeQueue<cv::Mat*> &queue){
 					rgbData=convertYUVToRGB(yuvdata,yuvwidth,yuvheight);
                     auto img = new cv::Mat(yuvheight, yuvwidth, CV_8UC3, rgbData);
 					queue.push(img);
-					cout<<"decode thread\t"<<queue.get_size()<<"\t"<<queue._head<<"\t"<<queue._end<<endl;
+					//cout<<"decode thread\t"<<queue.get_size()<<"\t"<<queue._head<<"\t"<<queue._end<<endl;
 				}
 			}
 		}else{
