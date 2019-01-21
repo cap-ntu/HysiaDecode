@@ -13,8 +13,9 @@
 
 int main(int argc, char **argv){
 	char* filename = argv[1];
+	char* config = argv[2];
 	struct timeval start, end;
-	Decoder<cv::Mat*> test("CPU");
+	Decoder<cv::Mat*> test(config);
 	test.ingestVideo(filename);
 	test.decode();
 	int frame_num = 0;
