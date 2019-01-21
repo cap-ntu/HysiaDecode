@@ -29,8 +29,8 @@ int main(int argc, char **argv){
 			break;
 		}
 		frame_num++;
-		delete(tmp);
 		std::cout<<tmp->rows<<"\t"<<tmp->cols<<std::endl;
+		delete(tmp);
 	}
 	gettimeofday(&end, NULL);
 	float duration = (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1000000.;
