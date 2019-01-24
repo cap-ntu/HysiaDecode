@@ -2,6 +2,16 @@
 
 This repository aims to provide a highly effienent and user-friendly video preprocessing library. 
 
+| pATH    | DESCRIPTION                                     |
+| ------- | ----------------------------------------------- |
+| include | header files(include the dependencies)          |
+| lib     | required libraries(E.g., OpenCV, FFmpeg, Cuvid) |
+| src     | implementation of decoding function             |
+| python  | warp the C++ function to Python                 |
+| test    | test files                                      |
+| build   | save the generated files(.o and .so) after make |
+| utils   | some pre-implemented functions in NvDecode      |
+
 # Required Packages and Platform
 
 Requirement | Minimal Version
@@ -66,10 +76,12 @@ Traceback (most recent call last):
     dec.ingestVideo(video_path)
 RuntimeError: NvDecoder : cuvidCtxLockCreate(&m_ctxLock, cuContext) returned error -1282253296 at src/NvDecoder/NvDecoder.cpp:524
 ```
-- Solution 1:
-
-This error comes from cuvid link conflicts. You should link 
+ Solution : This error comes from cuvid link conflicts. You should link 
 
 - Issue 2
 
-the decoding processing is blocking after a long time. When it happens, maybe your GPU does support NVDecode. You should try to consult the Nvidia documents to check whether you graphical card are suitable.
+```
+the decoding processing is blocked and does not start the decoded process
+```
+
+Solution: When it happens, maybe your GPU does support NVDecode. You should try to consult the Nvidia documents to check whether you graphical card are suitable. In this repository, we detached the decoded function from Video_Codec_SDK_8.2.16. 
