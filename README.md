@@ -2,7 +2,9 @@
 
 This repository aims to provide a highly effienent and user-friendly video preprocessing library. 
 
-| pATH    | DESCRIPTION                                     |
+
+
+| PATH    | DESCRIPTION                                     |
 | ------- | ----------------------------------------------- |
 | include | header files(include the dependencies)          |
 | lib     | required libraries(E.g., OpenCV, FFmpeg, Cuvid) |
