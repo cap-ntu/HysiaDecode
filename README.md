@@ -1,10 +1,16 @@
 # HysiaDecode
 
-This repository aims to provide a highly effienent and user-friendly video preprocessing library. 
+This repository aims to provide a highly efficient and user-friendly video preprocessing library. 
+
+The whole pipeline of the HysiaDecode can be illustrated in the following diagram. The Decode module firstly detect the GPU exist. If GPU exists, the module will select the GPU decoding function priorly. Otherwise, the module will select the CPU decoding function. It depends on user‘s hardware configuration.So    it support various types of users. After decoding, we save the data into a queue, and the applications can fetch the frames from the queue. To facilitate Python users,  we  warp the C++ function to Python using Pybind11.  You can follow the example you provided in test directory.  Enjoy your experience and don't forget to report the issue you encountered! 
 
 
 
-| PATH    | DESCRIPTION                                     |
+![](https://github.com/iversonicter/HysiaDecode/blob/develop/images/pipeline.png)
+
+
+
+| pATH    | DESCRIPTION                                     |
 | ------- | ----------------------------------------------- |
 | include | header files(include the dependencies)          |
 | lib     | required libraries(E.g., OpenCV, FFmpeg, Cuvid) |
