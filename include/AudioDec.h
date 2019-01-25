@@ -18,7 +18,7 @@ extern "C"
 #include "libavformat/avformat.h"
 #include "libavutil/avutil.h"
 #include "libswscale/swscale.h"
-#include "libavutil/imgutils.h"
+#include "libswresample/swresample.h"
 
 #ifdef __cplusplus
 }
@@ -26,7 +26,7 @@ extern "C"
 
 
 
-class AudioDecocer
+class AudioDecoder
 {
 private:
 	AVCodec *pVideoCodec = NULL;
@@ -40,10 +40,10 @@ private:
 	int audioindex = -1;
 
 public:
-	AudioDecocer();
-	~AudioDecocer();
+	AudioDecoder();
+	~AudioDecoder();
 	int IngestVideo(const char*);
-	int DecodeFrames(DecodeQueue<cv::Mat*> &queue) override;
+	int DecodeClips(DecodeQueue<uint8_t*> &queue);
 };
 
 #endif
