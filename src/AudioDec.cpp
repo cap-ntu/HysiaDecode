@@ -77,43 +77,49 @@ AudioDecoder::IngestVideo(const char* filename){
 
 }
 
-AudioDecoder::DecodeClips(DecodeQueue<uint8_t* > &queue){
+AudioDecoder::DecodeClips(uint8_t** audio_buffer, int* size){
 
 	AVFrame *pframe = av_frame_alloc();
 	AVPacket pkt;
 	av_init_packet(&pkt);
 	SwrContext *swrCtr = swr_alloc();
 	enum AVSampleFormat in_sample_fmt = pAudioCodecCtx->sample_fmt;
-	enum AVSampleFormat out_sample_fmt = AV_SAMPLE_FMT_S16;
+	enum AVSampleFormat out_sample_fmt = AV_SAMPLE_FMT_S16;//AV_SAMPLE_FMT_S16 signed 16 bits
 	int in_sample_rate = pAudioCodecCtx->sample_rate;
 	int out_sample_rate = 44100;
-	uint64_t in_ch_layout = pAudioCodecCtx->channel_layout;
-	uint64_t out_ch_layout = AV_CH_LAYOUT_STEREO; int frame_num = 0;
+	uint64_t in_ch_layout = pAudioCodecCtx->channel_layout; // input layer mono or stereo
+	uint64_t out_ch_layout = AV_CH_LAYOUT_STEREO; // stereo or mono
 	swr_alloc_set_opts(swrCtr,out_ch_layout,out_sample_fmt,out_sample_rate,in_ch_layout,in_sample_fmt,in_sample_rate,0,NULL);
 	swr_init(swrCtr);
 
 	int out_channel_nb = av_get_channel_layout_nb_channels(out_ch_layout);
-	uint8_t *out_buffer = (uint8_t *)av_malloc(48000 * 4);
-	int got_frame = 0, idex = 0, ret;
+	int got_frame = 0, ret;
+	*audio_buffer = NULL;
+	*size = 0;
 	while(av_read_frame(pFmt, &pkt) >= 0){
 		if(pkt.stream_index == audioindex)
 		{
 			ret = avcodec_decode_audio4(pAudioCodecCtx, pframe, &got_frame, &pkt);
 			if(got_frame > 0){
-				std::cout<<"audio decoding"<<std::endl;
+				//std::cout<<"audio decoding"<<std::endl;
+				//resample frames
+				int buffer_size = 44100 * 2; // sample rate * 16 bits
+				uint8_t *buffer = (uint8_t* )av_malloc(buffer_size);
+				swr_convert(swrCtr, &buffer, pframe->nb_samples, (const uint8_t**)pframe->data, pframe->nb_samples);
+				// append resampled frames to data
+				int out_buffer_size = av_samples_get_buffer_size(NULL, out_channel_nb, pframe->nb_samples, out_sample_fmt, 1);
+				
+				*audio_buffer = (uint8_t *)realloc(*audio_buffer, (*size + out_buffer_size) * sizeof(uint8_t));
+				memcpy(*audio_buffer + *size, buffer, out_buffer_size * sizeof(uint8_t));
+				*size += out_buffer_size;
 			}
-			swr_convert(swrCtr, &out_buffer, 48000*4, pframe->data, pframe->nb_samples);
-			int out_buffer_size = av_samples_get_buffer_size(NULL, out_channel_nb, pframe->nb_samples, out_sample_fmt, 1);
-			std::cout<<out_buffer_size<<std::endl;
 
 		}else{
-			std::cout<<"no audio stream"<<std::endl;
+			//std::cout<<"no audio stream"<<std::endl;
 		}
-		queue.push(out_buffer);
 		av_frame_unref(pframe);
 		av_free_packet(&pkt);
 	}
-
 
 	av_free(pframe);
 	//av_free(out_buffer);  free the memory after dequeue
@@ -125,4 +131,3 @@ AudioDecoder::DecodeClips(DecodeQueue<uint8_t* > &queue){
 	return 0;
 
 }
-

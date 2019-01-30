@@ -6,7 +6,6 @@
 
 #ifndef _AUDIODEC_H 
 #define _AUDIODEC_H
-#include "DecodeQueue.hpp"
 #include <cstdint>
 
 #ifdef __cplusplus
@@ -43,7 +42,7 @@ public:
 	AudioDecoder();
 	~AudioDecoder();
 	int IngestVideo(const char*);
-	int DecodeClips(DecodeQueue<uint8_t*> &queue);
+	int DecodeClips(uint8_t** audio_buffer, int *size);
 };
 
 #endif
