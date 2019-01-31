@@ -96,11 +96,11 @@ int CPUDecoder::DecodeFrames(DecodeQueue<cv::Mat*> &queue){
 	AVFrame *rgbframe = av_frame_alloc();
 	AVPacket pkt;
 	av_init_packet(&pkt);
-	unsigned char *out_buffer = (unsigned char*)av_malloc(av_image_get_buffer_size(AV_PIX_FMT_RGB24, pVideoCodecCtx->width, pVideoCodecCtx->height, 1));
-	av_image_fill_arrays(rgbframe->data, rgbframe->linesize, out_buffer, AV_PIX_FMT_RGB24, pVideoCodecCtx->width, pVideoCodecCtx->height, 1);
+	unsigned char *out_buffer = (unsigned char*)av_malloc(av_image_get_buffer_size(AV_PIX_FMT_BGR24, pVideoCodecCtx->width, pVideoCodecCtx->height, 1));
+	av_image_fill_arrays(rgbframe->data, rgbframe->linesize, out_buffer, AV_PIX_FMT_BGR24, pVideoCodecCtx->width, pVideoCodecCtx->height, 1);
 
 	struct SwsContext *img_convert_ctx = NULL;
-	img_convert_ctx = sws_getContext(pVideoCodecCtx->width, pVideoCodecCtx->height, pVideoCodecCtx->pix_fmt, pVideoCodecCtx->width, pVideoCodecCtx->height, AV_PIX_FMT_RGB24, SWS_BICUBIC, NULL, NULL, NULL);
+	img_convert_ctx = sws_getContext(pVideoCodecCtx->width, pVideoCodecCtx->height, pVideoCodecCtx->pix_fmt, pVideoCodecCtx->width, pVideoCodecCtx->height, AV_PIX_FMT_BGR24, SWS_BICUBIC, NULL, NULL, NULL);
 	while(1)
 	{
 		if (av_read_frame(pFmt, &pkt) >= 0)
@@ -138,5 +138,4 @@ int CPUDecoder::GetWidth(){
 int CPUDecoder::GetHeight(){
 	return pVideoCodecCtx->height;
 }
-
 
