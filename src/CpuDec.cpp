@@ -3,7 +3,6 @@
  * Author	: Wang Yongjie
  * Description: video decode with CPU
  */ 
-
 #include "CpuDec.h"
 #include <iostream>
 #include <cstdint>
@@ -112,11 +111,11 @@ int CPUDecoder::DecodeFrames(DecodeQueue<cv::Mat*> &queue){
 				if (got_picture)
 				{
 					sws_scale(img_convert_ctx, (const unsigned char* const*)pframe->data, pframe->linesize, 0, pVideoCodecCtx->height, rgbframe->data, rgbframe->linesize);
-
-                    auto img = new cv::Mat(pVideoCodecCtx->width, pVideoCodecCtx->height, CV_8UC3, rgbframe->data[0]);
-					//img->data = (uchar *)rgbframe->data[0];
+					int buffer_size = pVideoCodecCtx->height * pVideoCodecCtx->width * 3;
+					uint8_t *tmp = (uint8_t *)av_malloc(buffer_size);
+					memcpy(tmp, rgbframe->data[0], sizeof(uint8_t) * buffer_size);
+					cv::Mat *img = new cv::Mat(pVideoCodecCtx->height, pVideoCodecCtx->width, CV_8UC3, tmp); //rgbframe->data[0]);
 					queue.push(img);
-					//cout<<"decode thread\t"<<queue.get_size()<<"\t"<<queue._head<<"\t"<<queue._end<<endl;
 				}
 			}
 		}else{
