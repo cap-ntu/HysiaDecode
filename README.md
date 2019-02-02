@@ -51,8 +51,16 @@ Then:
 ```
 git clone https://github.com/iversonicter/HysiaDecode.git
 
-cd HysiaDecode; make
+cd HysiaDecode
 
+```
+If the required hardware or driver is not available:
+```
+make CPU_ONLY=TRUE
+```
+Otherwise:
+```
+make
 ```
 
 After compliation and link, this reporistory will generate a shared file like this 'PyDecoder.cpython-3xm-x86_64-linux-gnu.so' in build directory. You can import it in Python like this, don't forget add it into the system path unless you will meet this error " no moudle named PyDecoder ":
