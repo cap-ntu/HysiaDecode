@@ -107,20 +107,58 @@ public:
 			if(!tmp){continue;}
 			cv::imwrite(video_filename, *tmp);
 		}
-
+		return 0;
 	}
 
 	int SaveMemory(const char *ip = NULL, const int port = 0){
 		// save data into redis
 		// left empty temperoraily
+		if(ip == NULL && port == 0)
+		{
+			std::cerr<<"errors in:";
+			return -1;
+		}
 	}
+
+	int SetAlignedParam(const float duration = 1.0){// default audio length is 1. second for a frame
+		int sample_rate = 44100;
+		this->length = (int)(duration * sample_rate / 2 * 2 + 1);
+		this->start = -length / 2;
+		this->end = length / 2;
+		this->step = sample_rate * (1.0 / 30.); // 30 frames per second
+		this->ptr = length / 2;
+	};
+
+	int GetAlignedData(uint8_t **buffer){
+		// Get aligned audio data
+		
+		*buffer = new uint8_t[this->length];
+		memset(*buffer, 0, sizeof(uint8_t) * this->length);
+		this->ptr = std::max(this->ptr, 0);
+		this->start = std::max(this->start, 0);
+		this->end = std::min(this->end, this->size);
+		int copy_len = this->end - this->start;
+		memcpy(*buffer + this->ptr, this->audio_buffer + this->start, sizeof(uint8_t) * copy_len); // memory copy
+		//update 
+		this->start = this->start + this->step;
+		this->end = this->end + this->step;
+		this->ptr = this->ptr - this->step;
+		return 0;
+	}
+
 
 private:
 	DecodeQueue<cv::Mat* > queue = DecodeQueue<cv::Mat* >(1000000); // video decode queue
 	std::unique_ptr<BaseDecoder> vdec = nullptr;  // video codec
 	std::unique_ptr<AudioDecoder> adec = nullptr; // audio codec
 	uint8_t *audio_buffer = nullptr;  // audio decode buffer
+
+public:
 	int size;  // audio buffer length
 	char *filename = nullptr; // video files to be decoded
+	int start, end; // memory copy start/end point
+	int length; // audio length for a single frame
+	int ptr;  //  
+	int step; // sample numbers of per audio frame
 };
 #endif
