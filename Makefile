@@ -12,10 +12,15 @@ NVCCFLAGS := $(CCFLAGS)
 
 LDFLAGS := -Wl,-rpath=$(PROJECT_ROOT)/lib/ffmpeg -L$(PROJECT_ROOT)/lib/ffmpeg -lavformat -lavcodec -lavutil -lswscale # ffmpeg library
 LDFLAGS += -Wl,-rpath=$(PROJECT_ROOT)/lib/opencv -L$(PROJECT_ROOT)/lib/opencv -lavformat  -lopencv_core -lopencv_imgproc -lopencv_highgui -lz -lpthread # opencv library
-LDFLAGS += -Wl,-rpath=$(PROJECT_ROOT)/lib/nvcuvid -L$(PROJECT_ROOT)/lib/nvcuvid -lnvcuvid # nvcuvid
 LDFLAGS += -L$(CUDA_PATH)/lib64/stubs -lcuda
 LDFLAGS += -L$(CUDA_PATH)/lib64 -lcudart
 LDFLAGS += -shared
+
+ifndef CPU_ONLY
+LDFLAGS += -Wl,-rpath=/usr/lib/nvidia-415 -L/usr/lib/nvidia-415 -lnvcuvid # nvcuvid
+else
+LDFLAGS += -Wl,-rpath=$(PROJECT_ROOT)/lib/nvcuvid -L$(PROJECT_ROOT)/lib/nvcuvid -lnvcuvid
+endif
 
 # Project includes
 INCLUDES := -I./include 

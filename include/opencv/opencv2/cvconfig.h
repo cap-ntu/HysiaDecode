@@ -29,7 +29,7 @@
 /* #undef HAVE_CAMV4L */
 
 /* V4L2 capturing support */
-/* #undef HAVE_CAMV4L2 */
+#define HAVE_CAMV4L2
 
 /* Carbon windowing environment */
 /* #undef HAVE_CARBON */
@@ -49,20 +49,20 @@
 /* C= */
 /* #undef HAVE_CSTRIPES */
 
-/* NVIDIA CUDA Basic Linear Algebra Subprograms (BLAS) API*/
+/* NVidia Cuda Basic Linear Algebra Subprograms (BLAS) API*/
 /* #undef HAVE_CUBLAS */
 
-/* NVIDIA CUDA Runtime API*/
+/* NVidia Cuda Runtime API*/
 /* #undef HAVE_CUDA */
 
-/* NVIDIA CUDA Fast Fourier Transform (FFT) API*/
+/* NVidia Cuda Fast Fourier Transform (FFT) API*/
 /* #undef HAVE_CUFFT */
 
 /* IEEE1394 capturing support */
 /* #undef HAVE_DC1394 */
 
 /* IEEE1394 capturing support - libdc1394 v2.x */
-/* #undef HAVE_DC1394_2 */
+#define HAVE_DC1394_2
 
 /* DirectX */
 /* #undef HAVE_DIRECTX */
@@ -87,10 +87,10 @@
 /* #undef HAVE_GSTREAMER */
 
 /* GTK+ 2.0 Thread support */
-/* #undef HAVE_GTHREAD */
+#define HAVE_GTHREAD
 
 /* GTK+ 2.x toolkit */
-/* #undef HAVE_GTK */
+#define HAVE_GTK
 
 /* Halide support */
 /* #undef HAVE_HALIDE */
@@ -105,7 +105,9 @@
 #define HAVE_IPP
 #define HAVE_IPP_ICV
 #define HAVE_IPP_IW
-#define HAVE_IPP_IW_LL
+
+/* Intel IPP Async */
+/* #undef HAVE_IPP_A */
 
 /* JPEG-2000 codec */
 #define HAVE_JASPER
@@ -125,14 +127,14 @@
 /* Microsoft Media Foundation Capture library */
 /* #undef HAVE_MSMF */
 
-/* NVIDIA Video Decoding API*/
+/* NVidia Video Decoding API*/
 /* #undef HAVE_NVCUVID */
 
-/* NVIDIA Video Encoding API*/
+/* NVidia Video Encoding API*/
 /* #undef HAVE_NVCUVENC */
 
 /* OpenCL Support */
-/* #undef HAVE_OPENCL */
+#define HAVE_OPENCL
 /* #undef HAVE_OPENCL_STATIC */
 /* #undef HAVE_OPENCL_SVM */
 
@@ -140,7 +142,7 @@
 #define HAVE_OPENEXR
 
 /* OpenGL support*/
-/* #undef HAVE_OPENGL */
+#define HAVE_OPENGL
 
 /* OpenNI library */
 /* #undef HAVE_OPENNI */
@@ -158,7 +160,7 @@
 #define HAVE_PTHREADS_PF
 
 /* Qt support */
-#define HAVE_QT
+/* #undef HAVE_QT */
 
 /* Qt OpenGL support */
 /* #undef HAVE_QT_OPENGL */
@@ -242,7 +244,5 @@
 /* OpenCV trace utilities */
 #define OPENCV_TRACE
 
-/* Library QR-code decoding */
-#define HAVE_QUIRC
 
 #endif // OPENCV_CVCONFIG_H_INCLUDED

@@ -11,7 +11,7 @@ int main(int argc, char **argv){
 	AudioDecoder test = AudioDecoder();
 	test.IngestVideo(filename);
 	test.DecodeClips(&audio_buffer, &size);
-
+	/*
 	float sum = 0.0;
 	std::cout<<size<<std::endl;
 	for(int i = 0; i < size / 2; i++){
@@ -20,6 +20,15 @@ int main(int argc, char **argv){
 		tmp += tmp + audio_buffer[i * 2 + 1];
 		sum += tmp;
 	}
+	*/
+	std::cout<<size<<std::endl;
+	int sum = 0.0;
+	short *ptr = (short *)audio_buffer;
+	for(int i = 0; i < size / 2; i++)
+	{
+		sum += *(ptr + i);
+	}
+
 	fwrite(audio_buffer, 1, size, fp_pcm);
 	fclose(fp_pcm);
 

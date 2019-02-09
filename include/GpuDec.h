@@ -21,7 +21,6 @@ class GPUDecoder: public BaseDecoder
 {
 private:
     CUcontext cuContext = NULL;
-    std::ofstream fpOut;
     std::unique_ptr<NvDecoder> dec = nullptr;
     std::unique_ptr<FFmpegDemuxer> demuxer = nullptr;
     uint8_t* pVideo = NULL;

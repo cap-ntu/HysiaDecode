@@ -88,7 +88,7 @@ AudioDecoder::DecodeClips(uint8_t** audio_buffer, int* size){
 	int in_sample_rate = pAudioCodecCtx->sample_rate;
 	int out_sample_rate = 44100;
 	uint64_t in_ch_layout = pAudioCodecCtx->channel_layout; // input layer mono or stereo
-	uint64_t out_ch_layout = AV_CH_LAYOUT_STEREO; // stereo or mono
+	uint64_t out_ch_layout = AV_CH_LAYOUT_MONO; // stereo or mono
 	swr_alloc_set_opts(swrCtr,out_ch_layout,out_sample_fmt,out_sample_rate,in_ch_layout,in_sample_fmt,in_sample_rate,0,NULL);
 	swr_init(swrCtr);
 
@@ -103,7 +103,7 @@ AudioDecoder::DecodeClips(uint8_t** audio_buffer, int* size){
 			if(got_frame > 0){
 				//std::cout<<"audio decoding"<<std::endl;
 				//resample frames
-				int buffer_size = 44100 * 2; // sample rate * 16 bits
+				int buffer_size = 44100; // sample rate * 16 bits if stereo double
 				uint8_t *buffer = (uint8_t* )av_malloc(buffer_size);
 				swr_convert(swrCtr, &buffer, pframe->nb_samples, (const uint8_t**)pframe->data, pframe->nb_samples);
 				// append resampled frames to data

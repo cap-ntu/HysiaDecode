@@ -91,15 +91,6 @@ aligned to a size depending on the hardware. Single-row GpuMat is always a conti
 on its destructor. The destruction order of such variables and CUDA context is undefined. GPU memory
 release function returns error if the CUDA context has been destroyed before.
 
-Some member functions are described as a "Blocking Call" while some are described as a
-"Non-Blocking Call". Blocking functions are synchronous to host. It is guaranteed that the GPU
-operation is finished when the function returns. However, non-blocking functions are asynchronous to
-host. Those functions may return even if the GPU operation is not finished.
-
-Compared to their blocking counterpart, non-blocking functions accept Stream as an additional
-argument. If a non-default stream is passed, the GPU operation may overlap with operations in other
-streams.
-
 @sa Mat
  */
 class CV_EXPORTS GpuMat
@@ -160,38 +151,16 @@ public:
     //! swaps with other smart pointer
     void swap(GpuMat& mat);
 
-    /** @brief Performs data upload to GpuMat (Blocking call)
-
-    This function copies data from host memory to device memory. As being a blocking call, it is
-    guaranteed that the copy operation is finished when this function returns.
-    */
+    //! pefroms upload data to GpuMat (Blocking call)
     void upload(InputArray arr);
 
-    /** @brief Performs data upload to GpuMat (Non-Blocking call)
-
-    This function copies data from host memory to device memory. As being a non-blocking call, this
-    function may return even if the copy operation is not finished.
-
-    The copy operation may be overlapped with operations in other non-default streams if \p stream is
-    not the default stream and \p dst is HostMem allocated with HostMem::PAGE_LOCKED option.
-    */
+    //! pefroms upload data to GpuMat (Non-Blocking call)
     void upload(InputArray arr, Stream& stream);
 
-    /** @brief Performs data download from GpuMat (Blocking call)
-
-    This function copies data from device memory to host memory. As being a blocking call, it is
-    guaranteed that the copy operation is finished when this function returns.
-    */
+    //! pefroms download data from device to host memory (Blocking call)
     void download(OutputArray dst) const;
 
-    /** @brief Performs data download from GpuMat (Non-Blocking call)
-
-    This function copies data from device memory to host memory. As being a non-blocking call, this
-    function may return even if the copy operation is not finished.
-
-    The copy operation may be overlapped with operations in other non-default streams if \p stream is
-    not the default stream and \p dst is HostMem allocated with HostMem::PAGE_LOCKED option.
-    */
+    //! pefroms download data from device to host memory (Non-Blocking call)
     void download(OutputArray dst, Stream& stream) const;
 
     //! returns deep copy of the GpuMat, i.e. the data is copied
@@ -304,9 +273,6 @@ public:
 
     //! returns true if GpuMat data is NULL
     bool empty() const;
-
-    //! internal use method: updates the continuity flag
-    void updateContinuityFlag();
 
     /*! includes several bit-fields:
     - the magic signature

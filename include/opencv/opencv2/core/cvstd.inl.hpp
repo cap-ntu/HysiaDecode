@@ -77,8 +77,11 @@ inline
 String::String(const std::string& str)
     : cstr_(0), len_(0)
 {
-    size_t len = str.size();
-    if (len) memcpy(allocate(len), str.c_str(), len);
+    if (!str.empty())
+    {
+        size_t len = str.size();
+        if (len) memcpy(allocate(len), str.c_str(), len);
+    }
 }
 
 inline
@@ -96,8 +99,11 @@ inline
 String& String::operator = (const std::string& str)
 {
     deallocate();
-    size_t len = str.size();
-    if (len) memcpy(allocate(len), str.c_str(), len);
+    if (!str.empty())
+    {
+        size_t len = str.size();
+        if (len) memcpy(allocate(len), str.c_str(), len);
+    }
     return *this;
 }
 
@@ -259,19 +265,14 @@ std::ostream& operator << (std::ostream& out, const Rect_<_Tp>& rect)
 
 static inline std::ostream& operator << (std::ostream& out, const MatSize& msize)
 {
-    int i, dims = msize.dims();
+    int i, dims = msize.p[-1];
     for( i = 0; i < dims; i++ )
     {
-        out << msize[i];
+        out << msize.p[i];
         if( i < dims-1 )
             out << " x ";
     }
     return out;
-}
-
-static inline std::ostream &operator<< (std::ostream &s, cv::Range &r)
-{
-    return s << "[" << r.start << " : " << r.end << ")";
 }
 
 } // cv

@@ -80,7 +80,7 @@ cv::Mat* GPUDecoder::ToMat(uint8_t* rawData) {
     cv::Mat channelG(dec->GetHeight(), dec->GetWidth(), CV_8UC1, rawData + dec->GetHeight() * dec->GetWidth());
     cv::Mat channelR(dec->GetHeight(), dec->GetWidth(), CV_8UC1, rawData + 2 * dec->GetHeight() * dec->GetWidth());
 
-    std::vector<cv::Mat> channels{channelR, channelG, channelB};
+    std::vector<cv::Mat> channels{channelB, channelG, channelR};
     auto rgbImage = new cv::Mat();
     cv::merge(channels, *rgbImage);
     return rgbImage;
