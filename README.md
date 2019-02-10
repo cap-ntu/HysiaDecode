@@ -76,7 +76,7 @@ we test the decoding speed on our server(Titan X, Intel(R) Xeon(R) CPU E5-2630 v
 Hardware | Speed
 ---|---
 GPU decoding(Titan X) | ~800 frames/s
-CPU (Intel E5-2630) | ~300 frames/s 
+CPU (Intel E5-2630) | ~200 frames/s 
 Python  cv2.VideoCapture | 375 frames /s 
 OpenCV VideoCaptur* | 399 frames /s 
 OpenCV  cv::cudacodec::VideoReader* | 865 frames/s 
