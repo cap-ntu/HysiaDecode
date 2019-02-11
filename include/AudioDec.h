@@ -7,6 +7,8 @@
 #ifndef _AUDIODEC_H 
 #define _AUDIODEC_H
 #include <cstdint>
+#include <fstream>
+#include <iostream>
 
 #ifdef __cplusplus
 extern "C"
@@ -44,6 +46,7 @@ public:
 	int IngestVideo(const char*);
 	int DecodeClips(uint8_t** audio_buffer, int *size);
 	int SaveWav(uint8_t **audio_buffer, const int size, const char * filename);
+	void write_litten_endian(std::ofstream &file, unsigned int word, int num_bytes);
 };
 
 #endif
