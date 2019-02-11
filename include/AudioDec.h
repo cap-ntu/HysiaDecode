@@ -43,6 +43,7 @@ public:
 	~AudioDecoder();
 	int IngestVideo(const char*);
 	int DecodeClips(uint8_t** audio_buffer, int *size);
+	int SaveWav(uint8_t **audio_buffer, const int size, const char * filename);
 };
 
 #endif
