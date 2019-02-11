@@ -45,13 +45,13 @@ private:
 public:
 	AudioDecoder();
 	~AudioDecoder();
-	int IngestVideo(const char*);
-	int DecodeClips();
-	int SaveWav(const char * filename);
-	int SavePcm(const char *filename);
+	int ingestVideo(const char*);
+	int decodeClips();
+	int saveWav(const char * filename);
+	int savePcm(const char *filename);
 	void write_little_endian(std::ofstream &file, unsigned int word, int num_bytes);
-	int GetSize() const;
-	uint8_t* GetData() const;
+	int getSize() const;
+	uint8_t* getData() const;
 };
 
 #endif
