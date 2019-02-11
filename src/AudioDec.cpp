@@ -15,8 +15,7 @@ AudioDecoder::~AudioDecoder(){
 	free(audio_buffer);
 }
 
-
-AudioDecoder::IngestVideo(const char* filename){
+int AudioDecoder::ingestVideo(const char* filename){
 	av_register_all();
 	if (avformat_open_input(&pFmt, filename, piFmt, NULL) < 0)
 	{
@@ -77,7 +76,7 @@ AudioDecoder::IngestVideo(const char* filename){
 
 }
 
-AudioDecoder::DecodeClips(){
+int AudioDecoder::decodeClips(){
 
 	AVFrame *pframe = av_frame_alloc();
 	AVPacket pkt;
@@ -143,7 +142,7 @@ void AudioDecoder::write_little_endian(std::ofstream &file, unsigned int word, i
 	}
 }
 
-int AudioDecoder::SaveWav(const char *filename)
+int AudioDecoder::saveWav(const char *filename)
 {
 	std::ofstream file;
 	file.open(filename, std::ios::binary);
@@ -184,7 +183,7 @@ int AudioDecoder::SaveWav(const char *filename)
 
 }
 
-int AudioDecoder::SavePcm(const char *filename)
+int AudioDecoder::savePcm(const char *filename)
 {
 	std::ofstream file;
 	file.open(filename, std::ios::binary);
@@ -201,12 +200,12 @@ int AudioDecoder::SavePcm(const char *filename)
 	return 0;
 }
 
-uint8_t* AudioDecoder::GetData() const
+uint8_t* AudioDecoder::getData() const
 {
 	return this->audio_buffer;
 }
 
-int AudioDecoder::GetSize() const
+int AudioDecoder::getSize() const
 {
 	return this->length;
 }
