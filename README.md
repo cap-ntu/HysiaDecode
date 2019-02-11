@@ -71,6 +71,7 @@ import PyDecoder
 
 # Prefermance 
 
+<<<<<<< HEAD
 we test the decoding speed on our server(Titan X, Intel(R) Xeon(R) CPU E5-2630 v3 @ 2.40GHz) using several video clips from The Big Bang Series. 
 
 Hardware | Speed
@@ -80,6 +81,20 @@ Intel E5-2630 | ~300 frames/s
 
 
 # Issues
+=======
+we test the decoding speed on our server(Titan X, Intel(R) Xeon(R) CPU E5-2630 v3 @ 2.40GHz) using several video clips from The Big Bang Series.  We also compare the decoding speed with released algorithms in OpenCV.  We achieved the considerable performance. Need to notice, our library provide Python interface which can be easily used for users who don't familiar with C/C++.  This is only a alpha version of decoding. In the next step, we will continue optimizing the library to achieve a large throughput.  You are also welcomed to join our team to contribute your code. We also found that GPU initialization takes up much time. If you want to decode a short video clip, we recommend using CPU. Otherwise, GPU is preferred.
+
+Hardware | Speed
+---|---
+GPU decoding(Titan X) | ~800 frames/s
+CPU (Intel E5-2630) | ~200 frames/s 
+Python  cv2.VideoCapture | 375 frames /s 
+OpenCV VideoCaptur* | 399 frames /s 
+OpenCV  cv::cudacodec::VideoReader* | 865 frames/s 
+
+
+#  Issues
+>>>>>>> develop
 
 Some issues we met in develop and test. If you meet the same error, you can refer the  solution we provide here.
 
@@ -100,4 +115,22 @@ RuntimeError: NvDecoder : cuvidCtxLockCreate(&m_ctxLock, cuContext) returned err
 the decoding processing is blocked and does not start the decoded process
 ```
 
+<<<<<<< HEAD
 Solution: When it happens, maybe your GPU does support NVDecode. You should try to consult the Nvidia documents to check whether you graphical card are suitable. In this repository, we detached the decoded function from Video_Codec_SDK_8.2.16. 
+=======
+Solution: When it happens, maybe your GPU does support NVDecode. You should try to consult the Nvidia documents to check whether you graphical card are suitable. In this repository, we detached the decoded function from Video_Codec_SDK_8.2.16. 
+
+
+
+# Reference
+
+We referred the released repositories listed below:
+
+[Nvidia video_codec_SDK_8.2.16](https://developer.nvidia.com/nvidia-video-codec-sdk) 
+
+[scanner video decoding](https://github.com/scanner-research/scanner/tree/master/scanner/video/nvidia)
+
+[Nvidia NVVL](https://github.com/NVIDIA/nvvl)
+
+[FFmpeg official tutorials](https://ffmpeg.org/doxygen/trunk/encoding-example_8c-source.html#l00325)
+>>>>>>> develop
