@@ -39,14 +39,19 @@ private:
 	AVStream *pVst,*pAst;
 	int videoindex = -1;
 	int audioindex = -1;
+	uint8_t* audio_buffer = NULL; // audio buffer
+	int length = 0; // bytes of audio data
 
 public:
 	AudioDecoder();
 	~AudioDecoder();
 	int IngestVideo(const char*);
-	int DecodeClips(uint8_t** audio_buffer, int *size);
-	int SaveWav(uint8_t **audio_buffer, const int size, const char * filename);
+	int DecodeClips();
+	int SaveWav(const char * filename);
+	int SavePcm(const char *filename);
 	void write_little_endian(std::ofstream &file, unsigned int word, int num_bytes);
+	int GetSize() const;
+	uint8_t* GetData() const;
 };
 
 #endif

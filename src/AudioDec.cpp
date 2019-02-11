@@ -11,7 +11,8 @@ AudioDecoder::AudioDecoder(){//constuctor function
 }
 
 AudioDecoder::~AudioDecoder(){
-	//empty
+	// release memory
+	free(audio_buffer);
 }
 
 
@@ -76,7 +77,7 @@ AudioDecoder::IngestVideo(const char* filename){
 
 }
 
-AudioDecoder::DecodeClips(uint8_t** audio_buffer, int* size){
+AudioDecoder::DecodeClips(){
 
 	AVFrame *pframe = av_frame_alloc();
 	AVPacket pkt;
@@ -93,8 +94,8 @@ AudioDecoder::DecodeClips(uint8_t** audio_buffer, int* size){
 
 	int out_channel_nb = av_get_channel_layout_nb_channels(out_ch_layout);
 	int got_frame = 0, ret;
-	*audio_buffer = NULL;
-	*size = 0;
+	//*audio_buffer = NULL;
+	//*size = 0;
 	while(av_read_frame(pFmt, &pkt) >= 0){
 		if(pkt.stream_index == audioindex)
 		{
@@ -108,9 +109,9 @@ AudioDecoder::DecodeClips(uint8_t** audio_buffer, int* size){
 				// append resampled frames to data
 				int out_buffer_size = av_samples_get_buffer_size(NULL, out_channel_nb, pframe->nb_samples, out_sample_fmt, 1);
 				
-				*audio_buffer = (uint8_t *)realloc(*audio_buffer, (*size + out_buffer_size) * sizeof(uint8_t));
-				memcpy(*audio_buffer + *size, buffer, out_buffer_size * sizeof(uint8_t));
-				*size += out_buffer_size;
+				this->audio_buffer = (uint8_t *)realloc(this->audio_buffer, (this->length + out_buffer_size) * sizeof(uint8_t));
+				memcpy(audio_buffer + this->length, buffer, out_buffer_size * sizeof(uint8_t));
+				this->length += out_buffer_size;
 			}
 
 		}else{
@@ -140,10 +141,9 @@ void AudioDecoder::write_little_endian(std::ofstream &file, unsigned int word, i
 		word >>= 8;
 		num_bytes--;
 	}
-	return NULL;
 }
 
-int AudioDecoder::SaveWav(uint8_t **audio_buffer, const int size, const char *filename)
+int AudioDecoder::SaveWav(const char *filename)
 {
 	std::ofstream file;
 	file.open(filename, std::ios::binary);
@@ -154,7 +154,7 @@ int AudioDecoder::SaveWav(uint8_t **audio_buffer, const int size, const char *fi
 	// ChunkID RIFF
 	file<<"RIFF"; // 4 bytes
 	// ChunkSize 36 + subChunk2Size
-	this->write_little_endian(file, size + 36, 4); // 8 bytes
+	this->write_little_endian(file, this->length + 36, 4); // 8 bytes
 	// format + subchunk1ID
 	file<<"WAVEfmt "; // 16 bytes
 	// subchunk1size 16 for pcm
@@ -162,7 +162,7 @@ int AudioDecoder::SaveWav(uint8_t **audio_buffer, const int size, const char *fi
 	// audioformat pcm = 1
 	this->write_little_endian(file, 1, 2); // 22 bytes
 	// NumChannels Mono = 1
-	this->write_little_endian(file, 2, 2); // 24 bytes
+	this->write_little_endian(file, 1, 2); // 24 bytes
 	// SampleRate default 44100
 	this->write_little_endian(file, 44100, 4); // 28 bytes
 	// ByteRate sampleRate * NumChannels * BitsPerSample / 8
@@ -174,13 +174,40 @@ int AudioDecoder::SaveWav(uint8_t **audio_buffer, const int size, const char *fi
 	// Subchunk2ID
 	file<<"data"; // 40 bytes
 	// Subchunk2Size
-	this->write_little_endian(file, size, 4); // 44 bytes
+	this->write_little_endian(file, this->length, 4); // 44 bytes
 
-	for(int i = 0; i < size; i++){
-		file<<*(*audio_buffer + i);
+	for(int i = 0; i < this->length; i++){
+		file<<*(this->audio_buffer + i);
 	}
 	file.close();
 	return 0;
 
+}
+
+int AudioDecoder::SavePcm(const char *filename)
+{
+	std::ofstream file;
+	file.open(filename, std::ios::binary);
+	if(!file.is_open())
+	{
+		std::cerr<<"open file error";
+		return -1;
+	}
+	for(int i = 0; i < this->length; i++)
+	{
+		file<<*(this->audio_buffer + i);
+	}
+	file.close();
+	return 0;
+}
+
+uint8_t* AudioDecoder::GetData() const
+{
+	return this->audio_buffer;
+}
+
+int AudioDecoder::GetSize() const
+{
+	return this->length;
 }
 
