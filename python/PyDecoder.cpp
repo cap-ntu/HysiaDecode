@@ -3,6 +3,7 @@
 #include "opencv2/opencv.hpp"
 #include "../include/Decoder.hpp"
 #include <iostream>
+#include "../include/AudioDec.h"
 
 namespace py = pybind11;
 
@@ -30,7 +31,23 @@ py::array_t<uint8_t> fetchFrame(Decoder<cv::Mat*>* dec) {
 	}
 }
 
-
+py::array_t<int16_t> getData(AudioDecoder adec){
+	int size = adec.getSize();
+	int16_t *tmp = (int16_t *)adec.getData();
+	if(size > 0){
+		py::capsule cleanUp(tmp, [](void *d){
+				free(d);
+				cout<<
+				});
+		return py::array_t<int16_t>(
+				{size / 2},
+				{sizeof(int16_t)},
+				tmp,
+				cleanUp
+				);
+	}
+	return py::array_t<int16_t>();
+}
 
 PYBIND11_MODULE(PyDecoder, m) {
 	py::class_<Decoder<cv::Mat*>>(m, "Decoder")
@@ -41,6 +58,14 @@ PYBIND11_MODULE(PyDecoder, m) {
 		.def("getWidth", &Decoder<cv::Mat*>::getWidth)
 		.def("getHeight", &Decoder<cv::Mat*>::getHeight)
 		.def("fetchFrame", &fetchFrame);
-}
 
+	py::class_<AudioDecoder>(m, "AudioDecoder")
+		.def(py::init<>())
+		.def("ingestVideo", &AudioDecoder::ingestVideo)
+		.def("decodeClips", &AudioDecoder::decodeClips)
+		.def("saveWav", &AudioDecoder::saveWav)
+		.def("savePcm", &AudioDecoder::savePcm)
+		.def("getSize", &AudioDecoder::getSize)
+		.def("getData", &getData);
+}
 

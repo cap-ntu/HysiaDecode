@@ -11,8 +11,8 @@ AudioDecoder::AudioDecoder(){//constuctor function
 }
 
 AudioDecoder::~AudioDecoder(){
-	// release memory
-	free(audio_buffer);
+	// empty deconsturctor
+	// user must release memory mannually to avoid memory leak
 }
 
 int AudioDecoder::ingestVideo(const char* filename){
