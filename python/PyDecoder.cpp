@@ -37,7 +37,6 @@ py::array_t<int16_t> getData(AudioDecoder adec){
 	if(size > 0){
 		py::capsule cleanUp(tmp, [](void *d){
 				free(d);
-				cout<<
 				});
 		return py::array_t<int16_t>(
 				{size / 2},
