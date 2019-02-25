@@ -17,7 +17,7 @@ env: CUDA=9.0.176
 before_install:
     - sudo apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/7fa2af80.pub
     - sudo apt-get update
-    - sudo apt-get install cuda-9-0
+    - sudo apt-get install cuda
     - export LD_LIBRARY_PATH=/usr/local/cuda/lib64:${LD_LIBRARY_PATH}
     - sudo apt-get install python3-dev
     - sudo apt-get install python3-pip
