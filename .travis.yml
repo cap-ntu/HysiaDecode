@@ -6,8 +6,8 @@ git:
 compiler: g++
 dist: trusty
 sudo: true
-os:
-    - linux
+os: linux
+env: PYTHON=3.6
 
 env: cuda=true
 before_install:
