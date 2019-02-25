@@ -4,7 +4,7 @@ GCC ?= g++
 
 CCFLAGS := -std=c++11 -g 
 
-CUDA_PATH ?= /usr/local/cuda-9.0
+CUDA_PATH ?= /usr/local/cuda
 
 NVCC := $(CUDA_PATH)/bin/nvcc
  
