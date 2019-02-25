@@ -11,6 +11,8 @@ os:
 
 env: cuda=true
 before_install:
+    - sudo apt-get install python3.6-dev
+    - sudo apt-get install python-pip
     - sudo pip install pybind11
 
 script: make
