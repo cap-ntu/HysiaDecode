@@ -10,4 +10,4 @@ os:
     - linux
 
 env: cuda=true
-build: make
+script: make
