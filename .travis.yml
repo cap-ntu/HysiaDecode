@@ -10,4 +10,7 @@ os:
     - linux
 
 env: cuda=true
+before_install:
+    - sudo pip install pybind11
+
 script: make
