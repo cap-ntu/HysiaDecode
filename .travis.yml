@@ -6,4 +6,4 @@ os:
     - linux
 
 env: cuda=true
-sciprt: make
+build: make
