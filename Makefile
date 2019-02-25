@@ -32,7 +32,7 @@ INCLUDES += -I./include/Utils
 # CUDA includes
 INCLUDES += -I$(CUDA_PATH)/include
 # pybind11 includes
-INCLUDES += $(shell python -m pybind11 --includes)
+INCLUDES += $(shell python3 -m pybind11 --includes)
 
 SUFFIX ?= $(shell python3-config --extension-suffix)
 
