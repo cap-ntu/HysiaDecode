@@ -5,7 +5,7 @@ git:
 
 compiler: g++
 dist: trusty
-sudo: false
+sudo: true
 os:
     - linux
 
