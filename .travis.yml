@@ -13,7 +13,7 @@ env:
     - PYVERSION=python3.5
     - PYVERSION=python3.6
 
-env: cuda=true
+env: CUDA=9.0.176
 before_install:
     - sudo apt-get update
     - sudo apt-get install python3-dev
