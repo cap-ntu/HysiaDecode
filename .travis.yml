@@ -5,12 +5,17 @@ git:
 
 compiler: g++
 dist: trusty
-sudo: true
+sudo: required
 os: linux
-env: PYTHON=3.6
+env:
+    matrix:
+    - PYVERSION=python3.4
+    - PYVERSION=python3.5
+    - PYVERSION=python3.6
 
 env: cuda=true
 before_install:
+    - sudo apt-get update
     - sudo apt-get install python3-dev
     - sudo apt-get install python-pip
     - sudo pip install pybind11
