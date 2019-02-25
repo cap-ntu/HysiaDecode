@@ -1,5 +1,9 @@
 language: cpp
-compiler: gcc
+git:
+    quiet: true
+    depth: false
+
+compiler: g++
 dist: trusty
 sudo: false
 os:
