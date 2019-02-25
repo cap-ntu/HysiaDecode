@@ -7,6 +7,8 @@
 #ifndef _AUDIODEC_H 
 #define _AUDIODEC_H
 #include <cstdint>
+#include <fstream>
+#include <iostream>
 
 #ifdef __cplusplus
 extern "C"
@@ -37,12 +39,19 @@ private:
 	AVStream *pVst,*pAst;
 	int videoindex = -1;
 	int audioindex = -1;
+	uint8_t* audio_buffer = NULL; // audio buffer
+	int length = 0; // bytes of audio data
 
 public:
 	AudioDecoder();
 	~AudioDecoder();
-	int IngestVideo(const char*);
-	int DecodeClips(uint8_t** audio_buffer, int *size);
+	int ingestVideo(const char*);
+	int decodeClips();
+	int saveWav(const char * filename);
+	int savePcm(const char *filename);
+	void write_little_endian(std::ofstream &file, unsigned int word, int num_bytes);
+	int getSize() const;
+	uint8_t* getData() const;
 };
 
 #endif
