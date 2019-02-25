@@ -4,5 +4,7 @@ dist: trusty
 sudo: false
 os:
 - linux
+
+env: cuda=true
 sciprt:
 - make
