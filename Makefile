@@ -4,7 +4,7 @@ GCC ?= g++
 
 CCFLAGS := -std=c++11 -g 
 
-CUDA_PATH ?= /usr/local/cuda-9.0
+CUDA_PATH ?= /usr/local/cuda
 
 NVCC := $(CUDA_PATH)/bin/nvcc
  
@@ -32,7 +32,7 @@ INCLUDES += -I./include/Utils
 # CUDA includes
 INCLUDES += -I$(CUDA_PATH)/include
 # pybind11 includes
-INCLUDES += $(shell python -m pybind11 --includes)
+INCLUDES += $(shell python3 -m pybind11 --includes)
 
 SUFFIX ?= $(shell python3-config --extension-suffix)
 
