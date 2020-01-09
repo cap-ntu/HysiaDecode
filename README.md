@@ -1,5 +1,7 @@
 # HysiaDecode
 
+The sub-project of Hysia-T2O. Please go to the [Hysia-T2O](https://github.com/cap-ntu/Video-to-Online-Platform) to see the overview of the project.
+
 This repository aims to provide a highly efficient and user-friendly video preprocessing library. 
 
 The whole pipeline of the HysiaDecode can be illustrated in the following diagram. The Decode module firstly detect the GPU exist. If GPU exists, the module will select the GPU decoding function priorly. Otherwise, the module will select the CPU decoding function. It depends on user‘s hardware configuration.So    it support various types of users. After decoding, we save the data into a queue, and the applications can fetch the frames from the queue. To facilitate Python users,  we  warp the C++ function to Python using Pybind11.  You can follow the example you provided in test directory.  Enjoy your experience and don't forget to report the issue you encountered! 
